@@ -1,0 +1,110 @@
+In this lab, two c files were used to implement the calculator system having client-server paradigm.
+
+----------------------------------------------------------------------------------------------------------
+The algorithm for User.c (client)
+	This process accepts user input for the command and sends that command to the
+calculator process (server).
+
+
+create the message struct containing long int message type and array of char (message itself)
+
+In the main funciton
+{
+	create message queue where user is the sender and calculator is the receiver
+	create another message queue where calculator is the sender and user is the receiver
+	print list of commands for user
+
+	loop while it is still running {
+		loop while input is invalid {
+			prompt user to enter command
+			get user input
+			store user input in the array of char in struct
+			set bool valid = true;
+			if user input is "insert n"
+				set message type to 1
+			else if user input is "delete n"
+				set message type to 2
+			else if user input is "sum"
+				set message type to 3
+			else if user input is "avg"
+				set message type to 4
+			else if user input is "min"
+				set message type to 5
+			else if user input is "mid"
+				set message type to 6
+			else if user input is "end"
+				set message type to 7
+			else
+				// user entered invalid input
+				set message type to 0
+				set valid = false
+		}
+		
+		send the message from user to calculator
+
+		if user input is "end"
+			stop loop
+
+		if keep looping (means that user entered a valid command and it is not "end")
+			receive the message from calculator to user
+			print this message
+	}
+}
+
+
+
+--------------------------------------------------------------------------------------------------------------
+The algorithm for Calculator.c
+	This process receives the message from the user process. It stores the set of numbers and 
+perform the operations that corresponds to the command in the message that was received. It then 
+sends a message back to the user process containing the requested data.
+
+
+include nodecalc.h file
+include
+
+create the message struct containing long int message type and array of char (message itself)
+
+In the main function
+{
+	create message queue where user is the sender and calculator is the receiver
+	create another message queue where calculator is the sender and user is the receiver
+
+	loop while it is still running {
+		receive the message from the user to calculator
+		determine which command was sent
+		if command is "insert n"
+			convert n to integer
+			insert n to set of numbers
+			store the string containing the confirmation that the number was inserted to 
+				the array of char in message struct
+		if command is "delete n"
+			convert n to integer
+			delete all instances of n from set of numbers
+			store the string containing the confirmation that the number(s) was/were deleted
+				to the array of char in message struct
+		if command is "sum"
+			get sum of the set of numbers
+			store the string containing the sum of the set to the array of char in message struct
+		if command is "avg"
+			get the average of the set of numbers
+			store the string containing the sum of the set to the array of char in message struct
+		if command is "min"
+			get the smallest value from the set of numbers
+			store the string containing the min value from the set to the array of char in message struct 	
+		if command is "mid"
+			get the median value(s) from the set of numbers
+			store the string containing the median value(s) from the set to the array of char in message struct	
+		if command is "end" or invalid command
+			stop loop
+
+		if keep looping (means that user entered a valid command and it is not "end")
+			send the message from calculator to user
+	}
+	
+}
+
+
+The nodecalc.h file contains the implementation for the linked list, which is the data structure used in this calculator
+system. For each command, the insert and delete commands have an argument requirement in order for them to perform their
+operations correctly. The rest of the commands do not need an argument. 
